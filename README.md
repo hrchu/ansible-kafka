@@ -1,5 +1,5 @@
 # ansible-kafka
-Deploy multinode kafka cluster based on Confluent guide
+This will deploy multinode kafka cluster based on the Confluent guide. It setups three nodes, and each node runs both kafka and zookeeper in the docker containerization way.
 
 ## Getting start
 1. setup ssh passwordless 
