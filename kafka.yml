@@ -56,6 +56,11 @@
         dest: /opt/env.sh         
     - name: run docker-compose
       shell: . /opt/env.sh; /usr/local/bin/docker-compose -f /opt/docker-compose.yml up -d
+    - name: Wait for port to become open on the host.
+      wait_for:
+        port: 9092
+        delay: 3
+        timeout: 30
     - name: run kafkacat
       shell: /usr/bin/kafkacat -b "{{ inventory_hostname }}:9092" -L -t __confluent.support.metrics 
       register: cat
