@@ -41,15 +41,19 @@
       copy:
         src: docker-compose.yml
         dest: /opt/docker-compose.yml
+    - name: copy env file
+      copy:
+        content: >
+          export
+          VOLUME_ZK_DATA="{{ VOLUME_ZK_DATA }}" 
+          VOLUME_ZK_TXN_LOG="{{ VOLUME_ZK_TXN_LOG }}" 
+          VOLUME_KAFKA_DATA="{{ VOLUME_KAFKA_DATA }}" 
+          HOST1="{{ HOST1 }}"
+          HOST2="{{ HOST2 }}"
+          HOST3="{{ HOST3 }}"
+          MY_ID="{{ MY_ID }}"
+          MY_HOST="{{ inventory_hostname }}"
+        dest: /opt/env.sh         
     - name: run docker-compose
-      shell: >
-        VOLUME_ZK_DATA="{{ VOLUME_ZK_DATA }}" 
-        VOLUME_ZK_TXN_LOG="{{ VOLUME_ZK_TXN_LOG }}" 
-        VOLUME_KAFKA_DATA="{{ VOLUME_KAFKA_DATA }}" 
-        HOST1="{{ HOST1 }}"
-        HOST2="{{ HOST2 }}"
-        HOST3="{{ HOST3 }}"
-        MY_ID="{{ MY_ID }}"
-        MY_HOST="{{ inventory_hostname }}"
-        /usr/local/bin/docker-compose -f /opt/docker-compose.yml up -d
+      shell: . /opt/env.sh; /usr/local/bin/docker-compose -f /opt/docker-compose.yml up -d
 
