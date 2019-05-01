@@ -56,4 +56,8 @@
         dest: /opt/env.sh         
     - name: run docker-compose
       shell: . /opt/env.sh; /usr/local/bin/docker-compose -f /opt/docker-compose.yml up -d
-
+    - name: run kafkacat
+      shell: /usr/bin/kafkacat -b "{{ inventory_hostname }}:9092" -L -t __confluent.support.metrics 
+      register: cat
+      changed_when: False
+    - debug: var=cat.stdout_lines
