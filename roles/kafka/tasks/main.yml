@@ -32,9 +32,7 @@
           MY_ID="{{ MY_ID }}"
           MY_HOST="{{ inventory_hostname }}"
         dest: "{{ WORKING_DIRECTORY }}/env.sh"
-    - name: shutdown kafka
-      shell: . "{{ WORKING_DIRECTORY }}/env.sh"; docker-compose -f "{{ WORKING_DIRECTORY }}/docker-compose.yml" down
-    - name: start kafka
+    - name: start/restart kafka
       shell: . "{{ WORKING_DIRECTORY }}/env.sh"; docker-compose -f "{{ WORKING_DIRECTORY }}/docker-compose.yml" up -d
     - name: Wait kafka ready to serve...
       wait_for:

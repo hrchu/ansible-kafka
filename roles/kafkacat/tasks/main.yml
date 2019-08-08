@@ -15,12 +15,12 @@
     # config for root
     - name: create config directory
       file:
-        path: ".config"
+        path: "/root/.config"
         state: directory
     - name: create config file
       copy:
         src: kafkacat.conf
-        dest: ".config/kafkacat.conf"
+        dest: "/root/.config/kafkacat.conf"
 
     # config for me
     - name: create config directory
