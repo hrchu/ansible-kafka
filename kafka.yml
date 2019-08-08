@@ -2,6 +2,6 @@
 - hosts: kafka_servers
   vars:
     HOST_COUNT: "{{ ansible_play_hosts | length }}"
-  become: true 
-  roles: 
+  become: true
+  roles:
     - kafka

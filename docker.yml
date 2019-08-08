@@ -1,6 +1,6 @@
 ---
 - hosts: kafka_servers
-  become: true 
-  roles: 
+  become: true
+  roles:
     - docker
 
