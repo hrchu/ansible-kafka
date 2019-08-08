@@ -1,36 +1,6 @@
 ---
-- hosts: kafka
+- hosts: kafka_servers
   become: true 
-  tasks:
-    - name: create working directory
-      file:
-        path: "{{ WORKING_DIRECTORY }}"
-        state: directory
-
-    # docker from docker.com
-    - stat:  
-        path: /usr/local/bin/docker-compose
-      register: dockercompose 
-    - debug:
-        msg: "docker-compose exists..."
-      when: dockercompose.stat.exists    
-    - name: copy docker install script
-      copy: 
-        src: docker_ubuntu_install.sh
-        dest: "{{ WORKING_DIRECTORY }}/docker_ubuntu_install.sh"
-        mode: '755'
-      when: dockercompose.stat.exists == False and DOCKER_VERSION  == "docker.com"
-    - name: install latest docker
-      command: sh "{{ WORKING_DIRECTORY }}/docker_ubuntu_install.sh"
-      when: dockercompose.stat.exists == False and  DOCKER_VERSION  == "docker.com"
-
-    # docker from apt reops
-    - name: install docker from apt repos
-      apt:
-        name:
-          - 'docker-ce'
-          - 'docker-compose'
-        update_cache: yes
-      when:  DOCKER_VERSION  == "apt"
-
+  roles: 
+    - docker
 
