@@ -16,7 +16,7 @@ It will setup a three node cluster, kafka and zookeeper are co-location on each 
 ## Getting start
 1. setup ssh passwordless 
 2. `$apt install ansible`
-3. update vars in `hosts` file
+3. update configs in `hosts` and `group_vars/all` file
 4. `$ansible-playbook -i hosts site.yml`
 
 ## Reference
