@@ -32,13 +32,8 @@
           MY_ID="{{ MY_ID }}"
           MY_HOST="{{ inventory_hostname }}"
         dest: "{{ WORKING_DIRECTORY }}/env.sh"
-    - name: check hosts count
-      debug:
-        msg: 'Number of targeted hosts > 1. Suppress restarting kafka for HA.'
-      when: HOST_COUNT > 1
     - name: shutdown kafka
       shell: . "{{ WORKING_DIRECTORY }}/env.sh"; docker-compose -f "{{ WORKING_DIRECTORY }}/docker-compose.yml" down
-      when: HOST_COUNT == 1
     - name: start kafka
       shell: . "{{ WORKING_DIRECTORY }}/env.sh"; docker-compose -f "{{ WORKING_DIRECTORY }}/docker-compose.yml" up -d
     - name: Wait kafka ready to serve...

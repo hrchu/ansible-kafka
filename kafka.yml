@@ -1,7 +1,6 @@
 ---
 - hosts: kafka_servers
-  vars:
-    HOST_COUNT: "{{ ansible_play_hosts | length }}"
+  serial: 1 # rolling update
   become: true
   roles:
     - kafka
