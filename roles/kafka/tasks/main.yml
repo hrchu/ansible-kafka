@@ -1,0 +1,54 @@
+---
+    # create persistent volumes for kafka
+    - name: create volume zk data
+      file:
+        path: "{{ VOLUME_ZK_DATA }}"
+        state: directory
+    - name: create volume zk txn log
+      file:
+        path: "{{ VOLUME_ZK_TXN_LOG }}"
+        state: directory
+    - name: create volume zk data
+      file:
+        path: "{{ VOLUME_KAFKA_DATA }}"
+        state: directory
+
+
+    # kafka
+    - name: copy docker-compose file
+      copy:
+        src: docker-compose.yml
+        dest: "{{ WORKING_DIRECTORY }}/docker-compose.yml"
+    - name: copy env file
+      copy:
+        content: >
+          export
+          VOLUME_ZK_DATA="{{ VOLUME_ZK_DATA }}"
+          VOLUME_ZK_TXN_LOG="{{ VOLUME_ZK_TXN_LOG }}"
+          VOLUME_KAFKA_DATA="{{ VOLUME_KAFKA_DATA }}"
+          HOST1="{{ HOST1 }}"
+          HOST2="{{ HOST2 }}"
+          HOST3="{{ HOST3 }}"
+          MY_ID="{{ MY_ID }}"
+          MY_HOST="{{ inventory_hostname }}"
+        dest: "{{ WORKING_DIRECTORY }}/env.sh"
+    - name: check hosts count
+      debug:
+        msg: 'Number of targeted hosts > 1. Suppress restarting kafka for HA.'
+      when: HOST_COUNT > 1
+    - name: shutdown kafka
+      shell: . "{{ WORKING_DIRECTORY }}/env.sh"; docker-compose -f "{{ WORKING_DIRECTORY }}/docker-compose.yml" down
+      when: HOST_COUNT == 1
+    - name: start kafka
+      shell: . "{{ WORKING_DIRECTORY }}/env.sh"; docker-compose -f "{{ WORKING_DIRECTORY }}/docker-compose.yml" up -d
+    - name: Wait kafka ready to serve...
+      wait_for:
+        port: 9092
+        delay: 3
+        timeout: 30
+    - name: run kafkacat
+      shell: kafkacat -b "{{ inventory_hostname }}:9092" -L -t __confluent.support.metrics
+      register: cat
+      changed_when: False
+    - debug: var=cat.stdout_lines
+

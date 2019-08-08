@@ -1,0 +1,8 @@
+---
+- command: touch xd
+  become: false
+- block:
+    - debug:
+       msg: "hihi..."
+    - debug:
+        msg: "qq..."

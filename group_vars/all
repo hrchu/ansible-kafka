@@ -1,0 +1,17 @@
+---
+ansible_ssh_user: cht
+WORKING_DIRECTORY: /opt/kafka
+
+# ENV vars for kafka docker-compose
+VOLUME_ZK_DATA: /data/zk-data
+VOLUME_ZK_TXN_LOG: /ssd/zk-txn-logs
+VOLUME_KAFKA_DATA: /data/kakfa-data
+HOST1: 10.0.0.4
+HOST2: 10.0.0.6
+HOST3: 10.0.0.7
+
+# deploy options
+## docker.com: fetch the latest docker and docker-compose from docker.com; apt:  install the version from apt repos
+DOCKER_VERSION: docker.com
+## prebuilt: install prebuilt version. apt: install the version from apt repos.
+KAFKACAT_VERSION: prebuilt
