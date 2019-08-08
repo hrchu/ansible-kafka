@@ -1,14 +1,21 @@
 [kafka]
-10.0.0.7 MY_ID=1
-10.0.0.8 MY_ID=2
-10.0.0.9 MY_ID=3
+kafka01 MY_ID=1
+kafka02 MY_ID=2
+kafka03 MY_ID=3
 
 [kafka:vars]
-VOLUME_ZK_DATA=/vol1/zk-data
-VOLUME_ZK_TXN_LOG=/vol2/zk-txn-logs
-VOLUME_KAFKA_DATA=/vol3/kakfa-data
-HOST1=10.0.0.7
-HOST2=10.0.0.8
-HOST3=10.0.0.9
+VOLUME_ZK_DATA=/data/zk-data
+VOLUME_ZK_TXN_LOG=/ssd/zk-txn-logs
+VOLUME_KAFKA_DATA=/data/kakfa-data
+HOST1=10.0.0.4
+HOST2=10.0.0.6
+HOST3=10.0.0.7
 ansible_ssh_user=cht
+TZ=Asia/Taipei
+WORKING_DIRECTORY=/opt/kafka
 
+# options
+## docker.com: fetch the latest docker and docker-compose from docker.com; apt:  install the version from apt repos
+DOCKER_VERSION=docker.com 
+## prebuilt: install prebuilt version. apt: install the version from apt repos.
+KAFKACAT_VERSION=prebuilt

@@ -1,26 +1,10 @@
 ---
 - hosts: kafka
+  vars:
+    HOST_COUNT: "{{ ansible_play_hosts | length }}"
   become: true 
   tasks:
-    # install docker
-    - name: check docker exist
-      stat: 
-        path: /usr/local/bin/docker-compose
-      register: p 
-    - debug:
-        msg: "docker-compose exists..."
-      when: p.stat.exists    
-    - name: download docker install script
-      get_url: 
-        url: https://gist.githubusercontent.com/hrchu/8212f98a9a7b6691ad296d3c4bed02ac/raw/d62a124be977475097fda0be9fcef6b73a3cc7a8/docker_ubuntu_install.sh
-        dest: /opt/docker_ubuntu_install.sh
-        mode: 755
-      when: p.stat.exists == False
-    - name: execute docker install script
-      command: sh /opt/docker_ubuntu_install.sh
-      when: p.stat.exists == False
-
-    # create volumes
+    # create persistent volumes for kafka
     - name: create volume zk data
       file:
         path: "{{ VOLUME_ZK_DATA }}"
@@ -34,13 +18,12 @@
         path: "{{ VOLUME_KAFKA_DATA }}"
         state: directory
 
-    # exec kafka docker container
-    - name: install kafkacat
-      apt: name=kafkacat update_cache=yes state=latest
+ 
+    # kafka
     - name: copy docker-compose file
       copy:
         src: docker-compose.yml
-        dest: /opt/docker-compose.yml
+        dest: "{{ WORKING_DIRECTORY }}/docker-compose.yml"
     - name: copy env file
       copy:
         content: >
@@ -53,16 +36,23 @@
           HOST3="{{ HOST3 }}"
           MY_ID="{{ MY_ID }}"
           MY_HOST="{{ inventory_hostname }}"
-        dest: /opt/env.sh         
-    - name: run docker-compose
-      shell: . /opt/env.sh; /usr/local/bin/docker-compose -f /opt/docker-compose.yml up -d
-    - name: Wait for port to become open on the host.
+        dest: "{{ WORKING_DIRECTORY }}/env.sh"         
+    - name: check hosts count
+      debug:
+        msg: 'Number of targeted hosts > 1. Suppress restarting kafka for HA.'
+      when: HOST_COUNT > 1
+    - name: shutdown kafka
+      shell: . "{{ WORKING_DIRECTORY }}/env.sh"; docker-compose -f "{{ WORKING_DIRECTORY }}/docker-compose.yml" down
+      when: HOST_COUNT == 1
+    - name: start kafka
+      shell: . "{{ WORKING_DIRECTORY }}/env.sh"; docker-compose -f "{{ WORKING_DIRECTORY }}/docker-compose.yml" up -d
+    - name: Wait kafka ready to serve...
       wait_for:
         port: 9092
         delay: 3
         timeout: 30
     - name: run kafkacat
-      shell: /usr/bin/kafkacat -b "{{ inventory_hostname }}:9092" -L -t __confluent.support.metrics 
+      shell: kafkacat -b "{{ inventory_hostname }}:9092" -L -t __confluent.support.metrics 
       register: cat
       changed_when: False
     - debug: var=cat.stdout_lines

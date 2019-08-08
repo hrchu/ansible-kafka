@@ -1,0 +1,38 @@
+---
+- hosts: kafka
+  become: true 
+  tasks:
+    # kafkacat from apt repos
+    - name: install kafkacat from apt repos
+      apt: name=kafkacat update_cache=yes
+      when: KAFKACAT_VERSION == "apt"
+
+    # prebuilt kafkacat 
+    - name: install prebuilt kafkacat
+      copy:
+        src: kafkacat-1.4.0
+        dest: "/usr/local/bin/kafkacat"
+        mode: '755'
+      when:  KAFKACAT_VERSION == "prebuilt"
+    
+    # config for root
+    - name: create config directory
+      file:
+        path: ".config"
+        state: directory
+    - name: create config file
+      copy:
+        src: kafkacat.conf
+        dest: ".config/kafkacat.conf"   
+
+    # config for me
+    - name: create config directory
+      file:
+        path: ".config"
+        state: directory
+      become: false
+    - name: create config file
+      copy:
+        src: kafkacat.conf
+        dest: ".config/kafkacat.conf"     
+      become: false
