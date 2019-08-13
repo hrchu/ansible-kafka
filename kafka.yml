@@ -3,4 +3,5 @@
   #serial: 1 # enable this for rolling update
   become: true
   roles:
+    - common
     - kafka

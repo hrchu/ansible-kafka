@@ -38,7 +38,7 @@
       wait_for:
         port: 9092
         delay: 3
-        timeout: 30
+        timeout: 60
     - name: run kafkacat
       shell: kafkacat -b "{{ inventory_hostname }}:9092" -L -t __confluent.support.metrics
       register: cat

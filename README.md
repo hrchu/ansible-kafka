@@ -32,3 +32,7 @@ We use this script with following system confiuration:
 ## Reference
 * https://docs.confluent.io/current/kafka/multi-node.html#cp-multi-node
 * https://docs.confluent.io/current/installation/docker/installation/index.html#cp-docker-install
+
+## TODO:
+* Remove host vars in group_vars/all
+* Set /etc/hosts

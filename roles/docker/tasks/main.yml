@@ -1,10 +1,4 @@
----
-    - name: create working directory
-      file:
-        path: "{{ WORKING_DIRECTORY }}"
-        state: directory
-
-    # docker from docker.com
+   # docker from docker.com
     - name: check docker-compose already installed or not
       stat:
         path: /usr/local/bin/docker-compose

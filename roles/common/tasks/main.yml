@@ -1,0 +1,7 @@
+---
+   - name: create working directory
+     file:
+       path: "{{ WORKING_DIRECTORY }}"
+       state: directory
+
+ 
