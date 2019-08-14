@@ -1,6 +1,6 @@
 [kafka_servers]
-kafka000 MY_ID=1
-kafka001 MY_ID=2
-kafka002 MY_ID=3
+kafka01 MY_ID=1
+kafka02 MY_ID=2
+kafka03 MY_ID=3
 
 

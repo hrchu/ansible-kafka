@@ -6,9 +6,9 @@ WORKING_DIRECTORY: /opt/kafka
 VOLUME_ZK_DATA: /data/zk-data
 VOLUME_ZK_TXN_LOG: /ssd/zk-txn-logs
 VOLUME_KAFKA_DATA: /data/kakfa-data
-HOST1: kafka000
-HOST2: kafka001
-HOST3: kafka002
+HOST1: kafka01
+HOST2: kafka02
+HOST3: kafka03
 
 # deploy options
 ## docker.com: fetch the latest docker and docker-compose from docker.com; apt:  install the version from apt repos
