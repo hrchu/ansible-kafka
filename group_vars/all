@@ -1,5 +1,5 @@
 ---
-ansible_ssh_user: cht
+#ansible_user: sysop
 WORKING_DIRECTORY: /opt/kafka
 
 # ENV vars for kafka docker-compose
