@@ -11,8 +11,6 @@ services:
       ZOOKEEPER_SYNC_LIMIT: 2
       ZOOKEEPER_SERVERS: ${HOST1}:2888:3888;${HOST2}:2888:3888;${HOST3}:2888:3888
     network_mode: host
-    extra_hosts:
-      - "moby:127.0.0.1"
     volumes:
       - ${VOLUME_ZK_DATA}:/var/lib/zookeeper/data
       - ${VOLUME_ZK_TXN_LOG}:/var/lib/zookeeper/log
@@ -29,8 +27,6 @@ services:
       KAFKA_NUM_PARTITIONS: 8
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
-    extra_hosts:
-      - "moby:127.0.0.1"
     volumes:
       - ${VOLUME_KAFKA_DATA}:/var/lib/kafka/data
       - /etc/timezone:/etc/timezone:ro
